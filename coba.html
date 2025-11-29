@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kode TOGEL</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      color: #e0e0e0;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    
+    .header p {
+      color: #999;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+    
+    .card {
+      background: #2a2a2a;
+      border-radius: 16px;
+      padding: 40px 25px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    
+    .icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    
+    #output {
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: #e0e0e0;
+      margin: 25px 0;
+      padding: 25px;
+      background: #333;
+      border-radius: 12px;
+      letter-spacing: 10px;
+      word-wrap: break-word;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #404040;
+    }
+    
+    .loading {
+      animation: pulse 1.8s ease-in-out infinite;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: #888;
+      font-weight: 300;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    .info {
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+    
+    .refresh-btn {
+      margin-top: 20px;
+      padding: 12px 35px;
+      background: #3a3a3a;
+      color: #e0e0e0;
+      border: none;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+    
+    .refresh-btn:active {
+      transform: scale(0.97);
+      background: #4a4a4a;
+    }
+    
+    .error {
+      color: #999;
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Kode TOGEL</h1>
+      <p>Temukan kode keberuntungan Anda</p>
+    </div>
+    
+    <div class="card">
+      <div class="icon">◇</div>
+      <div id="output" class="loading">Memuat data...</div>
+      <div class="info">
+        Kode diambil dari database terpercaya
+      </div>
+      <button class="refresh-btn" onclick="loadData()">Muat Ulang</button>
+    </div>
+  </div>
+
+  <script>
+    async function loadData() {
+      const output = document.getElementById("output");
+      output.className = "loading";
+      output.innerText = "Memuat data...";
+      
+      const sheetId = "1BapNgrGyWuowpqKHTzh72eF7G7J-v96JBc0IMJcaGFA";
+      const range = "Sheet1!A1";
+      const apiKey = "AIzaSyDX1eTYgBWDBTYGtTXeMDAG7BzZX1r-ttc";
+
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        output.className = "";
+        if (data.values && data.values[0] && data.values[0][0]) {
+          output.innerText = data.values[0][0];
+        } else {
+          output.className = "error";
+          output.innerText = "Tidak ada data";
+        }
+      } catch (err) {
+        output.className = "error";
+        output.innerText = "Gagal memuat data";
+        console.error(err);
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
